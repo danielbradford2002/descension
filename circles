@@ -1,0 +1,63 @@
+PImage img;
+char sr = '1';
+void setup() {
+  size(900, 900, P3D);
+  img = loadImage(""); //any jpg image in the data folder of this project can be loaded in here
+  img.resize(900, 900); //sets image to 900 x900 square
+}
+
+void keyPressed(){
+   sr = key; //reads key input from user
+}
+
+void draw() {
+  background(#f7e948); //sets background color 
+  fill(0);
+  noStroke();
+  sphereDetail(3); //how round the spheres are
+  
+  float dots = 0; // the dots in the image
+switch(sr){ //amount of dots in the image; the more dots means the closer to the actual image the recreation is
+case '1': dots = 10;
+break;
+case '2': dots = 25;
+break;
+case '3': dots = 50;
+break;
+case '4': dots = 75;
+break;
+case '5': dots = 100;
+break;
+case '6': dots = 150;
+break;
+case '7': dots = 200;
+break;
+case '8': dots = 250;
+break;
+case '9': dots = 300;
+break;
+default: dots = 100;
+}
+dots = dots +0;
+  float dotSize = width/dots; //as number of tiles increase, the tiles get smaller
+  push();
+  translate(width/2,height/2);
+
+  rotateY(radians(frameCount/1.5)); //spins the image
+
+  
+  for (int xAxis = 0; xAxis < dots; xAxis++) {
+    for (int yAxis = 0; yAxis < dots; yAxis++) {
+      color col = img.get(int(xAxis*dotSize),int(yAxis*dotSize));
+      float bright = map(brightness(col),0,255,1,0);
+     float zAxis = map(bright,0,1,-150,150); //brings depth into the image
+      
+      push();
+      translate(xAxis*dotSize - width/2, yAxis*dotSize - height/2, zAxis);
+      sphere(dotSize*bright*0.5);
+      pop();
+      
+    }
+  }
+  pop();
+}
